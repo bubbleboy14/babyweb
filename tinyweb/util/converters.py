@@ -35,7 +35,7 @@ def rdec(data):
     return unquote(b64decode(data.encode()).decode())
 
 def renc(data):
-    return b64encode(quote(data.encode())).decode()
+    return b64encode(quote(data).encode()).decode()
 
 def rec_conv(data, de=False):
     if isinstance(data, bytes):
