@@ -1,4 +1,5 @@
 import json, cgi, ast, sys
+from base64 import b64decode
 from urllib.parse import unquote
 from .setters import local, localvars
 from ..config import config
