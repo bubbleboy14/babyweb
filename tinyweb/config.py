@@ -3,6 +3,7 @@ from fyg import Config, PCache
 config = Config({
 	"cache": PCache(".tw"),
 	"encode": False,
+	"memcache": False,
 	"mempad": 0, # 0 = unset (uses dez's default)
 	"webs": {},
 	"log": {
@@ -27,6 +28,7 @@ config = Config({
 		"xorigin": False,
 		"report": False,
 		"shield": False,
+		"debug": False,
 		"csp": None,
 		"log": None,
 		"errlog": None,
