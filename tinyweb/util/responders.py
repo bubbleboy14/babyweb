@@ -64,7 +64,7 @@ def resp_wrap(resp, failure):
             resp()
         except rel.errors.AbortBranch as e:
             _pre_close()
-            raise AbortBranch() # handled in rel
+            raise rel.errors.AbortBranch() # handled in rel
         except SystemExit:
             pass
         except Exception as e:

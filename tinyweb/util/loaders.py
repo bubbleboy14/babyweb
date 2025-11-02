@@ -34,6 +34,7 @@ def cgi_load():
         localvars.request = {}
 
 def cgi_get(key, choices=None, required=True, default=None, shield=False, decode=False, base64=False):
+    from .responders import fail
     request = local("request")
     val = request.get(key, default)
     if val is None:
