@@ -9,7 +9,8 @@ setup(
     description='ThINlY WrappEd weB',
     long_description='repackages async dez components like HTTPApplication and SocketController into a minimalist config-driven web (backend) framework',
     packages=[
-        'tinyweb'
+        'tinyweb',
+        'tinyweb.util'
     ],
     zip_safe = False,
     install_requires = [
