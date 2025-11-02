@@ -2,7 +2,7 @@ import json, cgi, ast, sys
 from base64 import b64decode
 from urllib.parse import unquote
 from .setters import local, localvars
-from .converters import rec_conv
+from .converters import dec, rec_conv
 from ..config import config
 
 def qs_get(x, y):
