@@ -13,7 +13,7 @@ setup(
     ],
     zip_safe = False,
     install_requires = [
-        "fyg >= 0.1.7.5",
+        "fyg >= 0.1.7.6",
         "dez >= 0.10.10.42"
     ],
     entry_points = '''''',
