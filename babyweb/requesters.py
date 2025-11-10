@@ -1,7 +1,7 @@
 import time, requests, json
 from dez.http import fetch as dfetch, post as dpost
 from fyg.util import log
-from .util import rec_conv
+from .util import rec_conv, dec
 
 def _ctjson(result):
 	if hasattr(result, "decode"):
