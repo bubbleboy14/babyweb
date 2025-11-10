@@ -5,28 +5,32 @@ from .config import config
 
 logger_getter = get_logger_getter("httpd", syslog, config.log.allow)
 
-def log(*args, **kwargs):
-    print(args, kwargs)
+_LOG = None
 
-# setters (see above)
 def setlog(f):
-    global log
-    log = f
+    global _LOG
+    _LOG = f
+
+def log(*args, **kwargs):
+	if _LOG:
+		_LOG(*args, **kwargs)
+	else:
+	    print(args, kwargs)
 
 TMSNAP = None
 
 def log_tracemalloc():
 	global TMSNAP
 	snapshot = tracemalloc.take_snapshot()
-	log("[LINEMALLOC START]", important=True)
+	syslog("[LINEMALLOC START]", important=True)
 	if TMSNAP:
 		lines = snapshot.compare_to(TMSNAP, 'lineno')
 	else:
 		lines = snapshot.statistics("lineno")
 	TMSNAP = snapshot
 	for line in lines[:10]:
-		log(line)
-	log("[LINEMALLOC END]", important=True)
+		syslog(line)
+	syslog("[LINEMALLOC END]", important=True)
 	return True
 
 PROC = None
@@ -37,9 +41,9 @@ def log_openfiles():
 		PROC = psutil.Process(os.getpid())
 	ofz = PROC.open_files()
 	if config.log.oflist:
-		log("OPEN FILES: %s"%(ofz,), important=True)
+		syslog("OPEN FILES: %s"%(ofz,), important=True)
 	else:
-		log("OPEN FILE COUNT: %s"%(len(ofz),), important=True)
+		syslog("OPEN FILE COUNT: %s"%(len(ofz),), important=True)
 	return True
 
 def log_kernel():
