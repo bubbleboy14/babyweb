@@ -1,4 +1,4 @@
-import tracemalloc, psutil, rel
+import tracemalloc, psutil, rel, os
 from fyg.util import log as syslog
 from dez.logging import get_logger_getter
 from .config import config
