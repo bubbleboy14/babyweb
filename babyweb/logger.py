@@ -1,4 +1,4 @@
-import tracemalloc, psutil, rel, os
+import tracemalloc, rel
 from fyg.util import log as syslog
 from dez.logging import get_logger_getter
 from .config import config
@@ -38,6 +38,7 @@ PROC = None
 def log_openfiles():
 	global PROC
 	if not PROC:
+		import os, psutil
 		PROC = psutil.Process(os.getpid())
 	ofz = PROC.open_files()
 	if config.log.oflist:
