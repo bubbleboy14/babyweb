@@ -1,4 +1,4 @@
-import os, time, requests, rel, ssl, sys, json, resource, tracemalloc, psutil
+import os, time, rel, ssl, sys, json, resource, tracemalloc
 from fyg.util import log, set_log, set_error
 from .logger import setlog, logger_getter, log_tracemalloc, log_openfiles, log_kernel
 from .controller import getController
