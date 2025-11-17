@@ -16,7 +16,7 @@ setup(
     install_requires = [
         "fyg >= 0.1.7.8",
         "dez >= 0.10.10.42",
-        "requests >= 2.32.5"
+        "requests >= 2.28.1"
     ],
     entry_points = '''''',
     classifiers = [
