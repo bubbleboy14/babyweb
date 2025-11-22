@@ -1,7 +1,8 @@
-import time, requests, json
+import time, json, random, requests
 from dez.http import fetch as dfetch, post as dpost
 from fyg.util import log
 from .util import rec_conv, dec
+from .config import config
 
 def _ctjson(result):
 	if hasattr(result, "decode"):
@@ -85,8 +86,17 @@ def _dosyncreq(requester, url, asjson, ctjson, rekwargs):
 		return _ctjson(result)
 	return asjson and json.loads(result) or result
 
+def getprox():
+	pcfg = config.proxy
+	return {
+		pcfg.proto: "%s://%s:%s@%s:%s"%(pcfg.proto, pcfg.user, config.cache("proxy pw? "),
+			pcfg.gateway, random.randint(pcfg.minport, pcfg.maxport))
+	}
+
 def syncreq(url, method="get", asjson=False, ctjson=False, retries=5, rekwargs={}):
 	attempt = 1
+	if config.proxy.active:
+		rekwargs["proxies"] = getprox()
 	requester = getattr(requests, method)
 	while attempt < retries:
 		try:
