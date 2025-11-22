@@ -12,6 +12,10 @@ config = Config({
 		"tracemalloc": False,
 		"allow": ["info", "log", "warn", "error"] # access,info,log,warn,error,detail,db,query,kernel
 	},
+	"proxy": { # user, gateway, minport, maxport
+		"active": False,
+		"proto": "https"
+	},
 	"mail": {
 		"mailer": None,
 		"name": None,
