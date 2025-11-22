@@ -1,10 +1,8 @@
-import sys
 from dez.memcache import get_memcache
 from dez.http.application import HTTPApplication
 from .logger import logger_getter
 from .routes import static, cb
 from .config import config
-sys.path.insert(0, ".") # for dynamically loading modules
 
 class WebBase(HTTPApplication):
     def __init__(self, bind_address, port, logger_getter, static=static, cb=cb, whitelist=[], blacklist=[], shield=False, mempad=0):
