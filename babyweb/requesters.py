@@ -88,9 +88,11 @@ def _dosyncreq(requester, url, asjson, ctjson, rekwargs):
 
 def getprox():
 	pcfg = config.proxy
+	prox = "http://%s:%s@%s:%s"%(pcfg.user, config.cache("proxy pw? "),
+		pcfg.gateway, random.randint(pcfg.minport, pcfg.maxport))
 	return {
-		pcfg.proto: "%s://%s:%s@%s:%s"%(pcfg.proto, pcfg.user, config.cache("proxy pw? "),
-			pcfg.gateway, random.randint(pcfg.minport, pcfg.maxport))
+		"http": prox,
+		"https": prox
 	}
 
 def syncreq(url, method="get", asjson=False, ctjson=False, retries=5, rekwargs={}):
