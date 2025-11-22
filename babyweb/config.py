@@ -13,8 +13,7 @@ config = Config({
 		"allow": ["info", "log", "warn", "error"] # access,info,log,warn,error,detail,db,query,kernel
 	},
 	"proxy": { # user, gateway, minport, maxport
-		"active": False,
-		"proto": "https"
+		"active": False
 	},
 	"mail": {
 		"mailer": None,
