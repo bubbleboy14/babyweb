@@ -35,21 +35,19 @@ def parse_url_parts(host, path, port, protocol):
 		port = protocol == "https" and 443 or 80
 	return host, path, port, protocol
 
-def fetch(host, path="/", port=None, asjson=False, cb=None, timeout=1, asyn=False, protocol="http", ctjson=False, qsp=None, fakeua=False, retries=5):
+def fetch(host, path="/", port=None, asjson=False, cb=None, timeout=1, asyn=False, protocol="http", ctjson=False, qsp=None, fakeua=False, retries=5, headers={}):
 	host, path, port, protocol = parse_url_parts(host, path, port, protocol)
 	if qsp:
 		path += "?"
 		for k, v in list(qsp.items()):
 			path += "%s=%s&"%(k, v)
 		path = path[:-1]
-	gkwargs = {}
-	headers = {}
+	gkwargs = { "headers": headers }
 	if fakeua:
 		if type(fakeua) is str:
 			headers['User-Agent'] = fakeua
 		else:
 			headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36'
-		gkwargs["headers"] = headers
 	if asyn or cb: # asyn w/o cb works, will just log
 		secure = protocol == "https"
 		if ctjson:
@@ -62,7 +60,7 @@ def fetch(host, path="/", port=None, asjson=False, cb=None, timeout=1, asyn=Fals
 	log("fetch %s"%(furl,))
 	return syncreq(furl, "get", asjson, ctjson, retries, gkwargs)
 
-def post(host, path="/", port=80, data=None, protocol="http", asjson=False, ctjson=False, text=None, cb=None):
+def post(host, path="/", port=80, data=None, protocol="http", asjson=False, ctjson=False, text=None, cb=None, headers={}):
 	if ctjson:
 		data = rec_conv(data)
 	if cb:
@@ -70,10 +68,10 @@ def post(host, path="/", port=80, data=None, protocol="http", asjson=False, ctjs
 			orig_cb = cb
 			cb = lambda v : orig_cb(_ctjson(v))
 		host, path, port, protocol = parse_url_parts(host, path, port, protocol)
-		return dpost(host, path, port, protocol == "https", data=data, text=text, cb=cb)
+		return dpost(host, path, port, protocol == "https", headers, data, text, cb)
 	url = "://" in host and host or "%s://%s:%s%s"%(protocol, host, port, path)
 	log("post %s"%(url,))
-	kwargs = {}
+	kwargs = { "headers": headers }
 	if data:
 		kwargs["json"] = data
 	elif text:
