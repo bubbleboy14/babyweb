@@ -60,14 +60,14 @@ def fetch(host, path="/", port=None, asjson=False, cb=None, timeout=1, asyn=Fals
 	log("fetch %s"%(furl,))
 	return syncreq(furl, "get", asjson, ctjson, retries, gkwargs)
 
-def post(host, path="/", port=80, data=None, protocol="http", asjson=False, ctjson=False, text=None, cb=None, headers={}):
+def post(host, path="/", port=None, data=None, protocol="http", asjson=False, ctjson=False, text=None, cb=None, headers={}):
+	host, path, port, protocol = parse_url_parts(host, path, port, protocol)
 	if ctjson:
 		data = rec_conv(data)
 	if cb:
 		if ctjson:
 			orig_cb = cb
 			cb = lambda v : orig_cb(_ctjson(v))
-		host, path, port, protocol = parse_url_parts(host, path, port, protocol)
 		return dpost(host, path, port, protocol == "https", headers, data, text, cb)
 	url = "://" in host and host or "%s://%s:%s%s"%(protocol, host, port, path)
 	log("post %s"%(url,))
