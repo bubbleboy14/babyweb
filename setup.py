@@ -15,7 +15,7 @@ setup(
     zip_safe = False,
     install_requires = [
         "fyg >= 0.1.7.8",
-        "dez >= 0.10.10.42",
+        "dez >= 0.10.10.43",
         "requests >= 2.28.1"
     ],
     entry_points = '''''',
