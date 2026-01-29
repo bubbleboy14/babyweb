@@ -10,6 +10,7 @@ def read_file(data_field):
 
 class Response(object):
     def __init__(self, request):
+        self.noabort = False
         self.id = request.id
         self.ip = request.real_ip
         self.request = request
@@ -52,7 +53,7 @@ class Response(object):
 
     def _close(self):
         timeout(.001, self.response.dispatch)
-        abort_branch()
+        self.noabort or abort_branch()
 
     def _header(self, *args, **kwargs):
         self.response.__setitem__(*args, **kwargs)
