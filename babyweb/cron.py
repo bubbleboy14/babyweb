@@ -98,15 +98,38 @@ class Cron(object):
 
     def parse(self):
         self.logger.info("parse")
+        schedule = None
+        active = True
         url = None
+        notflag = " is not "
+        versep = lambda negate : notflag if negate else " is "
         for line in read("cron.yaml", True):
             if line.startswith("- description: "):
                 self.logger.info("initializing %s"%(line[15:],))
             elif line.startswith("  url: "):
                 url = line[7:].strip()
+            elif line.startswith("  schedule: "):
+                schedule = line[12:].strip()
+            elif line.startswith("  active: "):
+                condition = line[10:].strip()
+                if condition == "True":
+                    active = True
+                elif condition == "False":
+                    active = False
+                else:
+                    negate = notflag in condition
+                    name, tar = condition.split(versep(negate))
+                    val = os.getenv(name)
+                    matching = val == tar
+                    active = not matching if negate else matching
+                    self.logger.info("setting active to %s because '%s' %s '%s'"%(active,
+                        val, versep(matching), tar))
             elif url:
-                self.timers[url] = Rule(self.controller, self.scheduler,
-                    url, line[12:].strip(), self.logger_getter)
+                if active:
+                    self.timers[url] = Rule(self.controller, self.scheduler,
+                        url, schedule, self.logger_getter)
+                schedule = None
+                active = True
                 url = None
 
     def start(self):
