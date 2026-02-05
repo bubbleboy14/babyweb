@@ -123,7 +123,7 @@ class Cron(object):
                     matching = val == tar
                     active = not matching if negate else matching
                     self.logger.info("setting active to %s because '%s' %s '%s'"%(active,
-                        val, versep(matching), tar))
+                        val, versep(not matching), tar))
             elif url:
                 if active:
                     self.timers[url] = Rule(self.controller, self.scheduler,
