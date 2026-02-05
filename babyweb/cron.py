@@ -97,7 +97,7 @@ class Cron(object):
         self.start()
 
     def set(self, url, schedule):
-        self.logger.info("set", url, schedule)
+        self.logger.info("set %s : %s"%(url, schedule))
         self.timers[url] = Rule(self.controller, self.scheduler,
             url, schedule, self.logger_getter)
 
