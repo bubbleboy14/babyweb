@@ -96,6 +96,11 @@ class Cron(object):
         self.parse()
         self.start()
 
+    def set(self, url, schedule):
+        self.logger.info("set", url, schedule)
+        self.timers[url] = Rule(self.controller, self.scheduler,
+            url, schedule, self.logger_getter)
+
     def parse(self):
         self.logger.info("parse")
         schedule = None
@@ -125,12 +130,11 @@ class Cron(object):
                     self.logger.info("setting active to %s because '%s' %s '%s'"%(active,
                         val, versep(not matching), tar))
             elif url:
-                if active:
-                    self.timers[url] = Rule(self.controller, self.scheduler,
-                        url, schedule, self.logger_getter)
+                active and self.set(url, schedule)
                 schedule = None
                 active = True
                 url = None
+        active and url and self.set(url, schedule) # if no trailing line break
 
     def start(self):
         self.logger.info("start")
