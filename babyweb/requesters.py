@@ -35,7 +35,7 @@ def parse_url_parts(host, path, port, protocol):
 		port = protocol == "https" and 443 or 80
 	return host, path, port, protocol
 
-def fetch(host, path="/", port=None, asjson=False, cb=None, timeout=1, asyn=False, protocol="http", ctjson=False, qsp=None, fakeua=False, retries=5, headers={}):
+def fetch(host, path="/", port=None, asjson=False, cb=None, timeout=1, asyn=False, protocol="http", ctjson=False, qsp=None, fakeua=False, retries=5, headers={}, silent=True):
 	host, path, port, protocol = parse_url_parts(host, path, port, protocol)
 	if qsp:
 		path += "?"
@@ -53,14 +53,14 @@ def fetch(host, path="/", port=None, asjson=False, cb=None, timeout=1, asyn=Fals
 		if ctjson:
 			orig_cb = cb or log
 			cb = lambda v : orig_cb(_ctjson(v))
-		return dfetch(host, path, port, secure, headers, cb, timeout, asjson)
+		return dfetch(host, path, port, secure, headers, cb, timeout, asjson, silent=silent)
 	if timeout:
 		gkwargs["timeout"] = timeout
 	furl = "%s://%s:%s%s"%(protocol, host, port, path)
 	log("fetch %s"%(furl,))
 	return syncreq(furl, "get", asjson, ctjson, retries, gkwargs)
 
-def post(host, path="/", port=None, data=None, protocol="http", asjson=False, ctjson=False, text=None, cb=None, headers={}):
+def post(host, path="/", port=None, data=None, protocol="http", asjson=False, ctjson=False, text=None, cb=None, eb=None, timeout=900, headers={}, silent=True):
 	host, path, port, protocol = parse_url_parts(host, path, port, protocol)
 	if ctjson:
 		data = rec_conv(data)
@@ -68,7 +68,7 @@ def post(host, path="/", port=None, data=None, protocol="http", asjson=False, ct
 		if ctjson:
 			orig_cb = cb
 			cb = lambda v : orig_cb(_ctjson(v))
-		return dpost(host, path, port, protocol == "https", headers, data, text, cb)
+		return dpost(host, path, port, protocol == "https", headers, data, text, cb, timeout, silent=silent, eb=eb)
 	url = "://" in host and host or "%s://%s:%s%s"%(protocol, host, port, path)
 	log("post %s"%(url,))
 	kwargs = { "headers": headers }
